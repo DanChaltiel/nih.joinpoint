@@ -18,6 +18,7 @@ tf = function(x) tolower(as.character(x))
 #' @importFrom readr read_delim
 #' @importFrom janitor clean_names
 #' @importFrom tibble as_tibble
+#' @importFrom dplyr  %>%
 #' @noRd
 #' @keywords internal
 r = function(x){
@@ -42,3 +43,7 @@ set_attrs = function(.x, ...){
   attributes(.x) <- c(attributes(.x), attrs)
   .x
 }
+
+
+
+utils::globalVariables(c(".", ".data"))

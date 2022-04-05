@@ -10,7 +10,7 @@ Authors@R:
 Description: Functions to easily use National Institute of Health (NIH)'s 'Joinpoint Regression Software'. 
   You **must** download and install the software beforehand at https://surveillance.cancer.gov/joinpoint/callable/. 
   NIH's approval will be needed to download the executable.
-License: GPL-3
+License: GPL-3 + file LICENSE
 URL: https://github.com/DanChaltiel/joinpoint/
 BugReports: https://github.com/DanChaltiel/joinpoint/issues/
 Depends:
@@ -38,6 +38,7 @@ Suggests:
     rmarkdown,
     systemfonts,
     testthat,
+    tidyverse,
     withr,
     waldo,
     knitr

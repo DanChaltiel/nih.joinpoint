@@ -6,9 +6,6 @@
 \usage{
 jp_plot(
   jp,
-  x,
-  y,
-  by,
   legend_pattern = getOption("jp_plot_pattern", "{xmin}-{xmax}: {slope}"),
   by_level = NULL
 )
@@ -25,9 +22,4 @@ jp_plot(
 }
 \description{
 Title
-}
-\examples{
-\dontrun{
- jp = 1
-}
 }

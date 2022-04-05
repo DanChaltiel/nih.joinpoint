@@ -4,7 +4,7 @@
 \alias{export_options}
 \title{Export options}
 \source{
-\link{https://surveillance.cancer.gov/joinpoint/Joinpoint_Help_4.8.0.1.pdf}
+https://surveillance.cancer.gov/joinpoint/Joinpoint_Help_4.8.0.1.pdf
 }
 \usage{
 export_options(

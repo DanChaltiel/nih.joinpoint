@@ -38,7 +38,7 @@
 #' @param export_pairwise export_pairwise
 #' @param export_jump_cr export_jump_cr
 #'
-#' @source [https://surveillance.cancer.gov/joinpoint/Joinpoint_Help_4.8.0.1.pdf]
+#' @source https://surveillance.cancer.gov/joinpoint/Joinpoint_Help_4.8.0.1.pdf
 #'
 #' @importFrom glue glue
 #' @export

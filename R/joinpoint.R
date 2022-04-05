@@ -19,7 +19,7 @@
 #' @param dir The temporary directory where all the temporary files will be written
 #' @param verbose unused for the moment
 #'
-#' @importFrom dplyr arrange
+#' @importFrom dplyr arrange %>%
 #' @importFrom glue glue glue_collapse
 #' @importFrom tidyselect eval_select
 #' @importFrom purrr map imap_chr
@@ -50,8 +50,6 @@ joinpoint = function(data, x, y, by=NULL, se=NULL,
                   "Run Options File=ini/run_opt_ini.ini",
                   "Output File File=jp_result.jpo")
   cat(session, file="session_run.ini")
-
-  # browser()
 
   y_type = match.arg(y_type) %>% tolower()
   x=tidyselect::eval_select(enquo(x), data)

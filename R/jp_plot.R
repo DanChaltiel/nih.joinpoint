@@ -7,21 +7,16 @@
 #'
 #' @return `patchwork` of `ggplot`s
 #' @export
-#' @importFrom dplyr select filter mutate group_by na_if
+#' @importFrom dplyr select filter mutate group_by na_if %>%
 #' @importFrom forcats as_factor
 #' @importFrom purrr imap
 #' @importFrom ggplot2 ggplot aes geom_point geom_line ylim ggtitle labs
 #' @importFrom patchwork wrap_plots
 #' @importFrom glue glue
-#' @importFrom rlang sym enquo
+#' @importFrom rlang sym enquo :=
 #' @importFrom tidyselect eval_select any_of
 #' @importFrom zoo na.locf
-#'
-#' @examples
-#' \dontrun{
-#'  jp = 1
-#' }
-jp_plot = function(jp, x, y, by,
+jp_plot = function(jp,
                    legend_pattern=getOption("jp_plot_pattern", "{xmin}-{xmax}: {slope}"),
                    by_level=NULL){
 
@@ -40,12 +35,11 @@ jp_plot = function(jp, x, y, by,
   v=sym(v)
 
   byname = names(select(jp$data_export, {{by}}))
-  # v = sym(names(select(jp$data_export, any_of(c("apc", "slope")))))
 
-  .data = jp$data_export %>%
-    mutate(slope0:=na_if(!!v, ".") %>% zoo::na.locf(fromLast=TRUE) %>% as_factor()) %>%
-    group_by(slope0) %>%
-    mutate(slope = slope0[1],
+  data = jp$data_export %>%
+    mutate(slope0 = na_if(!!v, ".") %>% zoo::na.locf(fromLast=TRUE) %>% as_factor()) %>%
+    group_by(.data$slope0) %>%
+    mutate(slope = .data$slope0[1],
            xmin = min({{x}}), xmax=max({{x}}),
            !!v := glue(legend_pattern))
 
@@ -56,30 +50,29 @@ jp_plot = function(jp, x, y, by,
     } else if(!all(by_level %in% .data[[byname]])){
       warning("`by_level` (=[", paste(by_level, collapse=","), "]) is not a value contained in column ", byname)
     } else {
-      .data = filter(.data, !!sym(by) %in% by_level)
+      data = filter(data, !!sym(by) %in% by_level)
     }
   }
 
 
   if(length(byname)>0){
-    .data %>%
+    p = data %>%
       split(.[[byname]]) %>%
       imap(~{
         ggplot(.x, aes(x={{x}}, y={{y}})) +
           geom_point() +
-          geom_line(aes(y=model, color=!!v, group=FALSE), size=1) +
+          geom_line(aes(y=.data$model, color=!!v, group=FALSE), size=1) +
           labs(color=v_label) +
           ylim(0, NA) +
           ggtitle(glue('{byname}={.y}'))
-      }) %>%
-      patchwork::wrap_plots()
+      })
   } else {
-    p = .data %>%
+    p = data %>%
       ggplot(aes(x={{x}}, y={{y}})) +
       geom_point() +
       labs(color=v_label) +
-      geom_line(aes(y=model, color=!!v, group=slope), size=1) +
+      geom_line(aes(y=.data$model, color=!!v, group=.data$slope), size=1) +
       ylim(0, NA)
-    patchwork::wrap_plots(p)
   }
+  patchwork::wrap_plots(p)
 }
