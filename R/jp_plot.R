@@ -1,40 +1,65 @@
 
 #' Title
 #'
-#' @param .data A data frame. Usually the member `data_export` of the result of [joinpoint()].
-#' @param x <`optional`> override the `x` column
-#' @param y <`optional`> override the `y` column
-#' @param by <`optional`> override the `by` columns
+#' @param jp A list generated using [joinpoint()].
 #' @param legend_pattern [glue::glue()] pattern for the legend. Can use variables `slope`, `xmin`, and `xmax`. Can be set through options, e.g. `options(jp_plot_pattern="-{slope}-")`.
+#' @param by_level One or several stratification levels. Works only if `jp` was made using one single stratification variable.
 #'
-#' @return a `ggplot` object if by==NULL, or a `patchwork` otherwise
+#' @return `patchwork` of `ggplot`s
 #' @export
-#' @import dplyr tidyselect rlang purrr glue readr
-#' @importFrom tidyselect eval_select
-#' @importFrom rlang enquo
-#' @importFrom purrr imap_chr
+#' @importFrom dplyr select filter mutate group_by na_if
+#' @importFrom forcats as_factor
+#' @importFrom purrr imap
+#' @importFrom ggplot2 ggplot aes geom_point geom_line ylim ggtitle labs
+#' @importFrom patchwork wrap_plots
+#' @importFrom glue glue
+#' @importFrom rlang sym enquo
+#' @importFrom tidyselect eval_select any_of
+#' @importFrom zoo na.locf
 #'
 #' @examples
 #' \dontrun{
 #'  jp = 1
 #' }
-jp_plot = function(.data, x, y, by,
-                   legend_pattern=getOption("jp_plot_pattern", "{xmin}-{xmax}: {slope}")){
-  v = sym(names(select(.data, any_of(c("apc", "slope")))))
+jp_plot = function(jp, x, y, by,
+                   legend_pattern=getOption("jp_plot_pattern", "{xmin}-{xmax}: {slope}"),
+                   by_level=NULL){
 
-  variables = attr(.data, "variables")
-  if(missing(x)) x = sym(variables$x)
-  if(missing(y)) y = sym(variables$y)
-  if(missing(by)) by = variables$by
+  variables = attr(jp$data_export, "variables")
+  x = sym(variables$x)
+  y = sym(variables$y)
+  by = variables$by
 
-  byname = names(select(.data, {{by}}))
+  v = intersect(c("apc", "slope"), names(jp$data_export))
+  if(length(v) !=1) stop("This should not happen, contact the developper of {joinpoint}.")
+  if(v=="apc"){
+    v_label = "Annual Percent Change"
+  } else {
+    v_label = "Slope"
+  }
+  v=sym(v)
 
-  .data = .data %>%
+  byname = names(select(jp$data_export, {{by}}))
+  # v = sym(names(select(jp$data_export, any_of(c("apc", "slope")))))
+
+  .data = jp$data_export %>%
     mutate(slope0:=na_if(!!v, ".") %>% zoo::na.locf(fromLast=TRUE) %>% as_factor()) %>%
     group_by(slope0) %>%
     mutate(slope = slope0[1],
            xmin = min({{x}}), xmax=max({{x}}),
            !!v := glue(legend_pattern))
+
+
+  if(!is.null(by_level)){
+    if(length(byname)!=1){
+      warning("`by_level` can only be used when a single stratification variable is set.")
+    } else if(!all(by_level %in% .data[[byname]])){
+      warning("`by_level` (=[", paste(by_level, collapse=","), "]) is not a value contained in column ", byname)
+    } else {
+      .data = filter(.data, !!sym(by) %in% by_level)
+    }
+  }
+
 
   if(length(byname)>0){
     .data %>%
@@ -43,15 +68,18 @@ jp_plot = function(.data, x, y, by,
         ggplot(.x, aes(x={{x}}, y={{y}})) +
           geom_point() +
           geom_line(aes(y=model, color=!!v, group=FALSE), size=1) +
+          labs(color=v_label) +
           ylim(0, NA) +
           ggtitle(glue('{byname}={.y}'))
       }) %>%
       patchwork::wrap_plots()
   } else {
-    .data %>%
+    p = .data %>%
       ggplot(aes(x={{x}}, y={{y}})) +
       geom_point() +
+      labs(color=v_label) +
       geom_line(aes(y=model, color=!!v, group=slope), size=1) +
       ylim(0, NA)
+    patchwork::wrap_plots(p)
   }
 }
