@@ -1,10 +1,10 @@
 
 #' API to run a joinpoint model
 #'
-#' Use the Joinpoint Regression Software provided by the NIH to run a regression.
+#' Use the Command-Line version of "Joinpoint Regression Software" provided by the NIH to run a regression.
 #' The software must be downloaded at https://surveillance.cancer.gov/joinpoint/callable/ and installed on a **Windows** computer. I am not aware of a version of this software for Linux or MacOS.
 #'
-#' This function will generate the .ini files, run the software, and then parse the result files as an plain old R list.
+#' This function will generate the `.ini` files, run the software, and then parse the result files as an plain old R list.
 #'
 #'
 #' @param data A data frame
@@ -13,21 +13,27 @@
 #' @param by `<tidy-select>` one or several stratification variable (for instance sex)
 #' @param se `<tidy-select>` the standard error of the dependant variable. Can be left as `NULL` at the cost of a longer computation. See https://seer.cancer.gov/seerstat/WebHelp/Rate_Algorithms.htm for calculation formulas.
 #' @param y_type the type of dependant variable. Must be one of `c("Age-Adjusted Rate", "Crude rate", "Percent", "Proportion", "Count")`.
-#' @param export_opt_ini the result of [generate_export_opt_ini()]
-#' @param run_opt_ini the result of [generate_run_opt_ini()]
+#' @param export_opt_ini the result of [export_options()]
+#' @param run_opt_ini the result of [run_options()]
 #' @param cmd_path the path to the executable. Can usualy be left default to `"C:/Program Files (x86)/Joinpoint Command/jpCommand.exe"`. Can also be set through `options(joinpoint_path="my/path/to/jp.exe")`.
-#' @param dir The
-#' @param verbose
+#' @param dir The temporary directory where all the temporary files will be written
+#' @param verbose unused for the moment
 #'
+#' @importFrom dplyr arrange
+#' @importFrom glue glue glue_collapse
+#' @importFrom tidyselect eval_select
+#' @importFrom purrr map imap_chr
+#' @importFrom readr write_delim read_file
+#' @importFrom rlang enquo sym
 #' @export
 #' @return the list of the output tables
 joinpoint = function(data, x, y, by=NULL, se=NULL,
                      y_type=c("Age-Adjusted Rate", "Crude rate", "Percent", "Proportion", "Count"),
-                     export_opt_ini, run_opt_ini,
+                     export_opt_ini=export_options(), run_opt_ini=run_options(),
                      cmd_path=getOption("joinpoint_path", "C:/Program Files (x86)/Joinpoint Command/jpCommand.exe"),
                      dir=tempdir(), verbose=TRUE){
   wd = getwd()
-  setwd(dir)
+  setwd(dir) #this is needed so `system()` writes in the temp directory
   unlink("joinpoint", recursive=TRUE, force=TRUE)
   dir.create("joinpoint", showWarnings = FALSE)
   setwd("joinpoint")
@@ -52,6 +58,7 @@ joinpoint = function(data, x, y, by=NULL, se=NULL,
   y=tidyselect::eval_select(enquo(y), data)
   se=tidyselect::eval_select(enquo(se), data, strict=FALSE)
   by=tidyselect::eval_select(enquo(by), data, strict=FALSE)
+  data = arrange(data, !!sym(names(x)))
 
   by_txt = NULL
   if(length(by)>0){
@@ -67,7 +74,8 @@ joinpoint = function(data, x, y, by=NULL, se=NULL,
   se_txt = NULL
   if(length(se)>0){
     se_txt = glue("standard error={names(se)}",
-                  "standard error location={se}")
+                  "standard error location={se}",
+                  .sep="\n")
   }
 
   #TODO faire les formats avec les variables factor ?
@@ -76,7 +84,7 @@ joinpoint = function(data, x, y, by=NULL, se=NULL,
                      "Datafile name=dataset.txt",
                      "File format=DOS/Windows",
                      "Field delimiter=tab",
-                     "Missing character=space",
+                     "Missing character=period",
                      "Fields with delimiter in quotes=false",
                      "Variable names include=false",
 
@@ -89,7 +97,7 @@ joinpoint = function(data, x, y, by=NULL, se=NULL,
                      se_txt
                      )
   cat(session_ini, file="ini/session_ini.ini")
-  write_delim(data, "dataset.txt", delim="\t", na=" ", col_names=FALSE)
+  write_delim(data, "dataset.txt", delim="\t", na=".", col_names=FALSE)
 
   #TODO verbose ?
   #TODO messages d'erreur si 127, si cmd_path ets mauvais...
@@ -115,9 +123,6 @@ joinpoint = function(data, x, y, by=NULL, se=NULL,
     report = r("session_run.report.txt")
     run_summary = readr::read_file("session_run.RunSummary.txt")
     variables = list(x=names(x), y=names(y), by=names(by), se=names(se))
-
-    print(data_export)
-
 
     rtn = list(
       aapc = aapc,
