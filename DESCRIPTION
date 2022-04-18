@@ -1,4 +1,4 @@
-Package: joinpoint
+Package: nih_joinpoint
 Title: R interface for NIH's Joinpoint Regression Software
 Version: 0.1.0.9000
 Authors@R: 
@@ -33,15 +33,15 @@ Imports:
   patchwork,
   zoo
 Suggests: 
-    covr,
-    crayon,
-    rmarkdown,
-    systemfonts,
-    testthat,
-    tidyverse,
-    withr,
-    waldo,
-    knitr
+  covr,
+  crayon,
+  rmarkdown,
+  systemfonts,
+  testthat,
+  tidyverse,
+  withr,
+  waldo,
+  knitr
 VignetteBuilder: 
   knitr
 Encoding: UTF-8
