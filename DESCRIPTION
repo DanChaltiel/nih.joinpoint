@@ -1,4 +1,4 @@
-Package: nih_joinpoint
+Package: nih.joinpoint
 Title: R interface for NIH's Joinpoint Regression Software
 Version: 0.1.0.9000
 Authors@R: 
