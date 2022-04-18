@@ -139,6 +139,8 @@ joinpoint = function(data, x, y, by=NULL, se=NULL,
   ) %>%
     map(set_attrs, variables=variables)
 
+  attr(rtn, "directory") = dir
+  attr(rtn, "version") = packageVersion("nih.joinpoint")
 
   setwd(wd_bak)
   rtn
