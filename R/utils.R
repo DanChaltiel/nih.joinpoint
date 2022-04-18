@@ -1,4 +1,7 @@
 
+utils::globalVariables(c(".", ".data"))
+
+
 #' Format helper
 #' @noRd
 #' @keywords internal
@@ -45,5 +48,23 @@ set_attrs = function(.x, ...){
 }
 
 
+#' Temporary directory for joinpoint files
+#'
+#' Creates a timestamped directory in Local/Temp
+#'
+#' @export
+#' @example
+#' dir = get_tempdir()
+#' print(dir)
+#' #browseURL(dir)
+get_tempdir = function(){
+  dirname = paste0(tempdir(), "\\joinpoint ", format(Sys.time(), "%Y-%m-%d %Hh%Mm%Ss"))
+  dir.create(dirname, showWarnings = FALSE)
+  dirname
+}
 
-utils::globalVariables(c(".", ".data"))
+
+
+
+
+

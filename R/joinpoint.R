@@ -31,14 +31,11 @@ joinpoint = function(data, x, y, by=NULL, se=NULL,
                      y_type=c("Age-Adjusted Rate", "Crude rate", "Percent", "Proportion", "Count"),
                      export_opt_ini=export_options(), run_opt_ini=run_options(),
                      cmd_path=getOption("joinpoint_path", "C:/Program Files (x86)/Joinpoint Command/jpCommand.exe"),
-                     dir=tempdir(), verbose=TRUE){
-  wd = getwd()
-  setwd(dir) #this is needed so `system()` writes in the temp directory
-  unlink("joinpoint", recursive=TRUE, force=TRUE)
-  dir.create("joinpoint", showWarnings = FALSE)
-  setwd("joinpoint")
+                     dir=get_tempdir(), verbose=TRUE){
+  wd_bak = getwd()
+  setwd(dir) #This is necessary for `system()` to write to the temp directory.
   on.exit({
-    setwd(wd)
+    setwd(wd_bak)
   })
   dir.create("ini", showWarnings = FALSE)
   cat(export_opt_ini, file="ini/export_opt_ini.ini")
@@ -107,8 +104,8 @@ joinpoint = function(data, x, y, by=NULL, se=NULL,
     # read.delim("session_run.ErrorFile.txt", sep="_____", encoding="UTF-16LE")
     # readChar("session_run.ErrorFile.txt", file.info("session_run.ErrorFile.txt")$size)
 
-    file.copy("session_run.ErrorFile.txt", glue("{wd}/joinpoint_error.txt"))
-    setwd(wd)
+    file.copy("session_run.ErrorFile.txt", glue("{wd_bak}/joinpoint_error.txt"))
+    setwd(wd_bak)
     stop("Error, see `joinpoint_error.txt` for the details")
 
   } else {
@@ -133,7 +130,9 @@ joinpoint = function(data, x, y, by=NULL, se=NULL,
     ) %>%
       map(set_attrs, variables=variables)
 
-    setwd(wd)
+    attr(rtn, directory=dir)
+
+    setwd(wd_bak)
     rtn
   }
 }
