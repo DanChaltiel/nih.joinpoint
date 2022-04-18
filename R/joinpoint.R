@@ -17,7 +17,7 @@
 #' @param run_opt_ini the result of [run_options()]
 #' @param cmd_path the path to the executable. Can usualy be left default to `"C:/Program Files (x86)/Joinpoint Command/jpCommand.exe"`. Can also be set through `options(joinpoint_path="my/path/to/jp.exe")`.
 #' @param dir The temporary directory where all the temporary files will be written
-#' @param verbose unused for the moment
+#' @param verbose Logical indicating whether or not to print out progress
 #'
 #' @importFrom dplyr arrange %>%
 #' @importFrom glue glue glue_collapse
@@ -31,7 +31,7 @@ joinpoint = function(data, x, y, by=NULL, se=NULL,
                      y_type=c("Age-Adjusted Rate", "Crude rate", "Percent", "Proportion", "Count"),
                      export_opt_ini=export_options(), run_opt_ini=run_options(),
                      cmd_path=getOption("joinpoint_path", "C:/Program Files (x86)/Joinpoint Command/jpCommand.exe"),
-                     dir=get_tempdir(), verbose=TRUE){
+                     dir=get_tempdir(), verbose=FALSE){
   wd_bak = getwd()
   setwd(dir) #This is necessary for `system()` to write to the temp directory.
   on.exit({
@@ -94,10 +94,10 @@ joinpoint = function(data, x, y, by=NULL, se=NULL,
   cat(session_ini, file="ini/session_ini.ini")
   write_delim(data, "dataset.txt", delim="\t", na=".", col_names=FALSE)
 
-  #TODO verbose ?
-  #TODO messages d'erreur si 127, si cmd_path ets mauvais...
-  run = system(paste0('"', cmd_path, '" ', "session_run.ini"), intern=TRUE)
-  # browser()
+  #TODO messages d'erreur si 127, si cmd_path est mauvais...
+  suppressWarnings(file.remove("session_run.ErrorFile.txt"))
+  system(paste0('"', cmd_path, '" ', "session_run.ini"), intern=isFALSE(verbose))
+
   if(file.exists("session_run.ErrorFile.txt")){
     # readr::read_file("session_run.ErrorFile.txt") %>% suppressWarnings() %>% stringi::stri_flatten()
     # readLines("session_run.ErrorFile.txt") %>% suppressWarnings() %>% .[. != ""]
@@ -108,33 +108,40 @@ joinpoint = function(data, x, y, by=NULL, se=NULL,
     setwd(wd_bak)
     stop("Error, see `joinpoint_error.txt` for the details")
 
-  } else {
-
-    aapc = r("session_run.aapcexport.txt")
-    apc = r("session_run.apcexport.txt")
-    data_export = r("session_run.dataexport.txt")
-    selected_model = r("session_run.finalselectedmodelexport.txt")
-    perm_test = r("session_run.permtestexport.txt")
-    report = r("session_run.report.txt")
-    run_summary = readr::read_file("session_run.RunSummary.txt")
-    variables = list(x=names(x), y=names(y), by=names(by), se=names(se))
-
-    rtn = list(
-      aapc = aapc,
-      apc = apc,
-      data_export = data_export,
-      selected_model = selected_model,
-      perm_test = perm_test,
-      report = report,
-      run_summary = run_summary
-    ) %>%
-      map(set_attrs, variables=variables)
-
-    attr(rtn, directory=dir)
-
-    setwd(wd_bak)
-    rtn
   }
+
+  aapc = r("session_run.aapcexport.txt")
+  apc = r("session_run.apcexport.txt")
+  data_export = r("session_run.dataexport.txt")
+  selected_model = r("session_run.finalselectedmodelexport.txt")
+  perm_test = r("session_run.permtestexport.txt")
+  report = r("session_run.report.txt")
+  run_summary = readr::read_file("session_run.RunSummary.txt")
+  variables = list(x=names(x), y=names(y), by=names(by), se=names(se))
+
+  if(isTRUE(verbose)){
+    cat("\n",
+        "***********************************",
+        "*           RUN SUMMARY           *",
+        "***********************************",
+        "",
+        run_summary, sep="\n")
+  }
+
+  rtn = list(
+    aapc = aapc,
+    apc = apc,
+    data_export = data_export,
+    selected_model = selected_model,
+    perm_test = perm_test,
+    report = report,
+    run_summary = run_summary
+  ) %>%
+    map(set_attrs, variables=variables)
+
+
+  setwd(wd_bak)
+  rtn
 }
 
 
