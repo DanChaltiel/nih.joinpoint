@@ -1,2 +1,2 @@
 library(testthat)
-test_check("joinpoint")
+test_check("nih.joinpoint")

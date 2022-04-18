@@ -53,7 +53,7 @@ set_attrs = function(.x, ...){
 #' Creates a timestamped directory in Local/Temp
 #'
 #' @export
-#' @example
+#' @examples
 #' dir = get_tempdir()
 #' print(dir)
 #' #browseURL(dir)

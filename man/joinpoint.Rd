@@ -15,8 +15,8 @@ joinpoint(
   run_opt_ini = run_options(),
   cmd_path = getOption("joinpoint_path",
     "C:/Program Files (x86)/Joinpoint Command/jpCommand.exe"),
-  dir = tempdir(),
-  verbose = TRUE
+  dir = get_tempdir(),
+  verbose = FALSE
 )
 }
 \arguments{
@@ -40,7 +40,7 @@ joinpoint(
 
 \item{dir}{The temporary directory where all the temporary files will be written}
 
-\item{verbose}{unused for the moment}
+\item{verbose}{Logical indicating whether or not to print out progress}
 }
 \value{
 the list of the output tables

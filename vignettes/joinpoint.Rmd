@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 
 # Joinpoint
 
-The package `{joinpoint}` is an R interface to easily use National Institute of Health (NIH)'s 'Joinpoint Regression Software' v4.9.0.0.
+The package `{nih.joinpoint}` is an R interface to easily use National Institute of Health (NIH)'s 'Joinpoint Regression Software' v4.9.0.0.
 
 It requires that you apply at [https://surveillance.cancer.gov/joinpoint/callable/](https://surveillance.cancer.gov/joinpoint/callable/) to get your copy of the software.
 
@@ -31,7 +31,7 @@ This package includes a part of the sample dataset provided with the software:
 
 ```{r, fig.height = 3, fig.width=7, message=FALSE}
 library(tidyverse)
-library(joinpoint)
+library(nih.joinpoint)
 
 sample_data %>% group_by(sex) %>% slice(1, 2, n()-1, n()) #first 2 and last 2 of each group
 

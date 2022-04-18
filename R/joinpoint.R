@@ -25,6 +25,7 @@
 #' @importFrom purrr map imap_chr
 #' @importFrom readr write_delim read_file
 #' @importFrom rlang enquo sym
+#' @importFrom utils packageVersion
 #' @export
 #' @return the list of the output tables
 joinpoint = function(data, x, y, by=NULL, se=NULL,
