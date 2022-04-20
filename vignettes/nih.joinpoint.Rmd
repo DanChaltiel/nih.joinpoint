@@ -1,0 +1,26 @@
+---
+title: "Running a joinpoint analysis"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Running a joinpoint analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  # out.width = "100%",
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The package `{nih.joinpoint}` is an R interface to easily use National Institute of Health (NIH)'s 'Joinpoint Regression Software' v4.9.0.0. 
+
+This vignette assume that you applied at [https://surveillance.cancer.gov/joinpoint/callable/](https://surveillance.cancer.gov/joinpoint/callable/) to get your own copy of this software and installed it. If you cannot or don't want to install it in the default location ("C:/Program Files (x86)/Joinpoint Command/jpCommand.exe"), you should use `options(joinpoint_path="my/path/to/jp.exe")`.
+
+This package will **NOT** work otherwise.
+
+
+```{r child="../man/fragments/overview.Rmd"} 
+```

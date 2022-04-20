@@ -11,7 +11,9 @@ maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lif
 [![CRAN
 status](https://www.r-pkg.org/badges/version/nih.joinpoint)](https://CRAN.R-project.org/package=nih.joinpoint)
 [![Last
-Commit](https://img.shields.io/github/last-commit/DanChaltiel/nih.joinpoint)](https://github.com/DanChaltiel/nih.joinpoint)
+Commit](https://img.shields.io/github/last-commit/DanChaltiel/nih.joinpoint/)](https://github.com/DanChaltiel/nih.joinpoint/)
+
+## Joinpoint Regression Software
 
 The package `{nih.joinpoint}` is an R interface to easily use National
 Institute of Health (NIH)‘s ’Joinpoint Regression Software’ v4.9.0.0.
@@ -33,6 +35,17 @@ should use `options(joinpoint_path="my/path/to/jp.exe")`.
 
 This package comes with no guarantee that it will work for any other
 version than v4.9.0.0.
+
+## Package Installation
+
+As for now, you can only install the development version of this package
+from GitHub:
+
+``` r
+devtools::install_github("DanChaltiel/nih.joinpoint")
+```
+
+I plan to release it on CRAN someday.
 
 ## Dataset
 
