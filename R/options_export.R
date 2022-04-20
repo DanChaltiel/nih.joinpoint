@@ -19,7 +19,7 @@
 #' @param correlation_matrix_precision correlation_matrix_precision
 #' @param apc_precision apc_precision
 #' @param aapc_precision aapc_precision
-#' @param aapc_segemnt_ranges_precision aapc_segemnt_ranges_precision
+#' @param aapc_segment_ranges_precision aapc_segment_ranges_precision
 #' @param pvalue_precision pvalue_precision
 #' @param aapc_full_range aapc_full_range
 #' @param aapc_start_range1 aapc_start_range1
@@ -51,7 +51,7 @@ export_options = function(models=c("best fit", "all"),
                           include_apcs=TRUE, x_precision=9, y_precision=9, model_precision=3,
                           estimated_joinpoint_precision=3, regression_coefficients_precision=3,
                           covariance_matrix_precision=3, correlation_matrix_precision=3,
-                          apc_precision=3,aapc_precision=3, aapc_segemnt_ranges_precision=3,
+                          apc_precision=3,aapc_precision=3, aapc_segment_ranges_precision=3,
                           pvalue_precision=3,
                           aapc_full_range=FALSE,
                           aapc_start_range1 = NULL, aapc_end_range1 = NULL,
@@ -94,7 +94,7 @@ export_options = function(models=c("best fit", "all"),
              f("Correlation Matrix Precision", correlation_matrix_precision, missing(correlation_matrix_precision)),
              f("APC Precision", apc_precision, missing(apc_precision)),
              f("AAPC Precision", aapc_precision, missing(aapc_precision)),
-             f("AAPC Segment Ranges Precision", aapc_segemnt_ranges_precision, missing(aapc_segemnt_ranges_precision)),
+             f("AAPC Segment Ranges Precision", aapc_segment_ranges_precision, missing(aapc_segment_ranges_precision)),
              f("P-Value Precision", pvalue_precision, missing(pvalue_precision)),
              f("AAPC Full Range", aapc_full_range, missing(aapc_full_range)),
              f("AAPC Start Range1", aapc_start_range1, missing(aapc_start_range1)),

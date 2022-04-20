@@ -1,7 +1,7 @@
 
 The package `{nih.joinpoint}` is an R interface to easily use National Institute of Health (NIH)'s 'Joinpoint Regression Software' v4.9.0.0.
 
-> **Displaimer**:  
+> **Disclaimer**:  
 > According to the [Terms of Use Agreement](https://surveillance.cancer.gov/joinpoint/callable/personal_joinpoint_agreement.doc) of NIH, I am not allowed to share a copy of the software   
 > You need to apply at [https://surveillance.cancer.gov/joinpoint/callable/](https://surveillance.cancer.gov/joinpoint/callable/) to get your own copy. This package will **NOT** work otherwise.  
 > If you want to cite this package in a publication, you have to cite NIH as well.
@@ -39,7 +39,7 @@ Note that the computing time will increase exponentially with `max_joinpoints` a
 
 ## Run
 
-To run the analysis, you then call `joinpoint()` with arguments: your dataset, the variables you want to consider, and the above-mentionned options.
+To run the analysis, you then call `joinpoint()` with arguments: your dataset, the variables you want to consider, and the above-mentioned options.
 
 ```{r}
 jp = joinpoint(sample_data, x=year, y=rate, by=sex, se=se,

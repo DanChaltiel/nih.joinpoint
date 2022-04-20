@@ -16,7 +16,7 @@ Commit](https://img.shields.io/github/last-commit/DanChaltiel/nih.joinpoint)](ht
 The package `{nih.joinpoint}` is an R interface to easily use National
 Institute of Health (NIH)‘s ’Joinpoint Regression Software’ v4.9.0.0.
 
-> **Displaimer**:  
+> **Disclaimer**:  
 > According to the [Terms of Use
 > Agreement](https://surveillance.cancer.gov/joinpoint/callable/personal_joinpoint_agreement.doc)
 > of NIH, I am not allowed to share a copy of the software  
@@ -88,7 +88,7 @@ Note that the computing time will increase exponentially with
 ## Run
 
 To run the analysis, you then call `joinpoint()` with arguments: your
-dataset, the variables you want to consider, and the above-mentionned
+dataset, the variables you want to consider, and the above-mentioned
 options.
 
 ``` r

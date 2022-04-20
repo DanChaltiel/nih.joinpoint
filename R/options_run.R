@@ -2,7 +2,7 @@
 
 
 
-#' Modelisation options
+#' Design options
 #'
 #' Create a character representation of the `.ini` file needed for run options.
 #'
@@ -23,7 +23,7 @@
 #' @param early_stopping early_stopping
 #' @param run_type run_type
 #' @param rates_per_n rates_per_n
-#' @param dependant_variable_type dependant_variable_type
+#' @param dependent_variable_type dependent_variable_type
 #' @param het_error het_error
 #' @param het_error_var_location het_error_var_location
 #' @param ci_method ci_method
@@ -34,7 +34,7 @@
 #' @param comparability_ratio comparability_ratio
 #' @param include_std_analysis include_std_analysis
 #' @param jump_location jump_location
-#' @param comparability_ratio_calue comparability_ratio_calue
+#' @param comparability_ratio_value comparability_ratio_value
 #' @param cr_variance cr_variance
 #' @param joinpoint_alpha_lvl joinpoint_alpha_lvl
 #' @param apc_alpha_lvl apc_alpha_lvl
@@ -58,7 +58,7 @@ run_options = function(model=c("linear", "ln"), data_shift=0, min_joinpoints=0, 
                        permutation_signif_lvl=0.05, n_permutations=4499,
                        early_stopping=c("b-value", "curtailed", "fixed"),
                        run_type=c("calculated", "provided"), rates_per_n=100000,
-                       dependant_variable_type=c("count", "crude rate", "age-adjusted rate",
+                       dependent_variable_type=c("count", "crude rate", "age-adjusted rate",
                                                  "proportion", "percent"),
                        het_error = c("constant variance", "standard error",
                                      "poisson rate", "poisson count"),
@@ -70,7 +70,7 @@ run_options = function(model=c("linear", "ln"), data_shift=0, min_joinpoints=0, 
                        autocorr_errors=c("number", "estimated"),
                        jump_model=FALSE, comparability_ratio=FALSE, include_std_analysis=FALSE,
                        jump_location=9999,
-                       comparability_ratio_calue=0, cr_variance=0, joinpoint_alpha_lvl=0.05,
+                       comparability_ratio_value=0, cr_variance=0, joinpoint_alpha_lvl=0.05,
                        apc_alpha_lvl=0.05, aapc_alpha_lvl=0.05, jump_cr_alpha_lvl=0.05,
                        random_seed=7160, empirical_quantile_seed=10000,
                        empirical_quantile_seed_type=c("constant", "varying"),
@@ -95,7 +95,7 @@ run_options = function(model=c("linear", "ln"), data_shift=0, min_joinpoints=0, 
              f("Early stopping", match.arg(early_stopping), missing(early_stopping)),
              f("Run type", match.arg(run_type), missing(run_type)),
              f("Rates per N", rates_per_n, missing(rates_per_n)),
-             f("Dependent variable type", match.arg(dependant_variable_type), missing(dependant_variable_type)),
+             f("Dependent variable type", match.arg(dependent_variable_type), missing(dependent_variable_type)),
              f("Het error", match.arg(het_error), missing(het_error)),
              f("Het error variable location", het_error_var_location, missing(het_error_var_location)),
              f("CI method", match.arg(ci_method), missing(ci_method)),
@@ -106,7 +106,7 @@ run_options = function(model=c("linear", "ln"), data_shift=0, min_joinpoints=0, 
              f("Comparability ratio", tf(comparability_ratio), missing(comparability_ratio)),
              f("Include standard analysis", tf(include_std_analysis), missing(include_std_analysis)),
              f("Jump location", jump_location, missing(jump_location)),
-             f("Comparability ratio value", comparability_ratio_calue, missing(comparability_ratio_calue)),
+             f("Comparability ratio value", comparability_ratio_value, missing(comparability_ratio_value)),
              f("CR variance", cr_variance, missing(cr_variance)),
              f("Joinpoint alpha level", joinpoint_alpha_lvl, missing(joinpoint_alpha_lvl)),
              f("APC alpha level", apc_alpha_lvl, missing(apc_alpha_lvl)),

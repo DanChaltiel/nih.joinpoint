@@ -24,7 +24,7 @@ export_options(
   correlation_matrix_precision = 3,
   apc_precision = 3,
   aapc_precision = 3,
-  aapc_segemnt_ranges_precision = 3,
+  aapc_segment_ranges_precision = 3,
   pvalue_precision = 3,
   aapc_full_range = FALSE,
   aapc_start_range1 = NULL,
@@ -77,7 +77,7 @@ export_options(
 
 \item{aapc_precision}{aapc_precision}
 
-\item{aapc_segemnt_ranges_precision}{aapc_segemnt_ranges_precision}
+\item{aapc_segment_ranges_precision}{aapc_segment_ranges_precision}
 
 \item{pvalue_precision}{pvalue_precision}
 

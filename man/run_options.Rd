@@ -2,7 +2,7 @@
 % Please edit documentation in R/options_run.R
 \name{run_options}
 \alias{run_options}
-\title{Modelisation options}
+\title{Design options}
 \usage{
 run_options(
   model = c("linear", "ln"),
@@ -23,7 +23,7 @@ run_options(
   early_stopping = c("b-value", "curtailed", "fixed"),
   run_type = c("calculated", "provided"),
   rates_per_n = 1e+05,
-  dependant_variable_type = c("count", "crude rate", "age-adjusted rate", "proportion",
+  dependent_variable_type = c("count", "crude rate", "age-adjusted rate", "proportion",
     "percent"),
   het_error = c("constant variance", "standard error", "poisson rate", "poisson count"),
   het_error_var_location = NULL,
@@ -36,7 +36,7 @@ run_options(
   comparability_ratio = FALSE,
   include_std_analysis = FALSE,
   jump_location = 9999,
-  comparability_ratio_calue = 0,
+  comparability_ratio_value = 0,
   cr_variance = 0,
   joinpoint_alpha_lvl = 0.05,
   apc_alpha_lvl = 0.05,
@@ -85,7 +85,7 @@ run_options(
 
 \item{rates_per_n}{rates_per_n}
 
-\item{dependant_variable_type}{dependant_variable_type}
+\item{dependent_variable_type}{dependent_variable_type}
 
 \item{het_error}{het_error}
 
@@ -107,7 +107,7 @@ run_options(
 
 \item{jump_location}{jump_location}
 
-\item{comparability_ratio_calue}{comparability_ratio_calue}
+\item{comparability_ratio_value}{comparability_ratio_value}
 
 \item{cr_variance}{cr_variance}
 

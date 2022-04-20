@@ -8,14 +8,14 @@
 #'
 #'
 #' @param data A data frame
-#' @param x `<tidy-select>` the independant variable (for instance the year)
-#' @param y `<tidy-select>` the dependant variable of type `y_type`
+#' @param x `<tidy-select>` the independent variable (for instance the year)
+#' @param y `<tidy-select>` the dependent variable of type `y_type`
 #' @param by `<tidy-select>` one or several stratification variable (for instance sex)
-#' @param se `<tidy-select>` the standard error of the dependant variable. Can be left as `NULL` at the cost of a longer computation. See https://seer.cancer.gov/seerstat/WebHelp/Rate_Algorithms.htm for calculation formulas.
-#' @param y_type the type of dependant variable. Must be one of `c("Age-Adjusted Rate", "Crude rate", "Percent", "Proportion", "Count")`.
+#' @param se `<tidy-select>` the standard error of the dependent variable. Can be left as `NULL` at the cost of a longer computation. See https://seer.cancer.gov/seerstat/WebHelp/Rate_Algorithms.htm for calculation formulas.
+#' @param y_type the type of dependent variable. Must be one of `c("Age-Adjusted Rate", "Crude rate", "Percent", "Proportion", "Count")`.
 #' @param export_opt_ini the result of [export_options()]
 #' @param run_opt_ini the result of [run_options()]
-#' @param cmd_path the path to the executable. Can usualy be left default to `"C:/Program Files (x86)/Joinpoint Command/jpCommand.exe"`. Can also be set through `options(joinpoint_path="my/path/to/jp.exe")`.
+#' @param cmd_path the path to the executable. Can usually be left default to `"C:/Program Files (x86)/Joinpoint Command/jpCommand.exe"`. Can also be set through `options(joinpoint_path="my/path/to/jp.exe")`.
 #' @param dir The temporary directory where all the temporary files will be written
 #' @param verbose Logical indicating whether or not to print out progress
 #'

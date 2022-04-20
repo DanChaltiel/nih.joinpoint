@@ -22,21 +22,21 @@ joinpoint(
 \arguments{
 \item{data}{A data frame}
 
-\item{x}{\verb{<tidy-select>} the independant variable (for instance the year)}
+\item{x}{\verb{<tidy-select>} the independent variable (for instance the year)}
 
-\item{y}{\verb{<tidy-select>} the dependant variable of type \code{y_type}}
+\item{y}{\verb{<tidy-select>} the dependent variable of type \code{y_type}}
 
 \item{by}{\verb{<tidy-select>} one or several stratification variable (for instance sex)}
 
-\item{se}{\verb{<tidy-select>} the standard error of the dependant variable. Can be left as \code{NULL} at the cost of a longer computation. See https://seer.cancer.gov/seerstat/WebHelp/Rate_Algorithms.htm for calculation formulas.}
+\item{se}{\verb{<tidy-select>} the standard error of the dependent variable. Can be left as \code{NULL} at the cost of a longer computation. See https://seer.cancer.gov/seerstat/WebHelp/Rate_Algorithms.htm for calculation formulas.}
 
-\item{y_type}{the type of dependant variable. Must be one of \code{c("Age-Adjusted Rate", "Crude rate", "Percent", "Proportion", "Count")}.}
+\item{y_type}{the type of dependent variable. Must be one of \code{c("Age-Adjusted Rate", "Crude rate", "Percent", "Proportion", "Count")}.}
 
 \item{export_opt_ini}{the result of \code{\link[=export_options]{export_options()}}}
 
 \item{run_opt_ini}{the result of \code{\link[=run_options]{run_options()}}}
 
-\item{cmd_path}{the path to the executable. Can usualy be left default to \code{"C:/Program Files (x86)/Joinpoint Command/jpCommand.exe"}. Can also be set through \code{options(joinpoint_path="my/path/to/jp.exe")}.}
+\item{cmd_path}{the path to the executable. Can usually be left default to \code{"C:/Program Files (x86)/Joinpoint Command/jpCommand.exe"}. Can also be set through \code{options(joinpoint_path="my/path/to/jp.exe")}.}
 
 \item{dir}{The temporary directory where all the temporary files will be written}
 
