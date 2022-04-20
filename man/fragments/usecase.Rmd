@@ -1,0 +1,72 @@
+
+The package `{nih.joinpoint}` is an R interface to easily use National Institute of Health (NIH)'s 'Joinpoint Regression Software' v4.9.0.0.
+
+> **Displaimer**:  
+> According to the [Terms of Use Agreement](https://surveillance.cancer.gov/joinpoint/callable/personal_joinpoint_agreement.doc) of NIH, I am not allowed to share a copy of the software   
+> You need to apply at [https://surveillance.cancer.gov/joinpoint/callable/](https://surveillance.cancer.gov/joinpoint/callable/) to get your own copy. This package will **NOT** work otherwise.  
+> If you want to cite this package in a publication, you have to cite NIH as well.
+
+The software will come as a Windows installer that needs to be installed. If you cannot or don't want to install it in the default location ("C:/Program Files (x86)/Joinpoint Command/jpCommand.exe"), you should use `options(joinpoint_path="my/path/to/jp.exe")`.
+
+This package comes with no guarantee that it will work for any other version than v4.9.0.0.
+
+## Dataset
+
+This package includes a part of the sample dataset provided with the software:
+
+```{r, fig.height = 3, fig.width=7, message=FALSE}
+library(tidyverse)
+library(nih.joinpoint)
+
+sample_data %>% group_by(sex) %>% slice(1, 2, n()-1, n()) #first 2 and last 2 of each group
+
+ggplot(sample_data, aes(x=year, y=rate, color=sex)) + geom_point() + geom_line()
+```
+
+## Parameters
+
+You can use `run_options()` and `export_options()` to setup parameters for the joinpoint analysis:
+
+```{r}
+run_opt = run_options(model="ln", max_joinpoints=3, n_cores=3)
+export_opt = export_options()
+```
+
+In this example, we ask for a log-linear model, with a maximum of 3 joinpoints to be found, using 3 cores of your processor to parallelize to computing. See `?run_options()` for more options.  
+Export options are left as default as they often mess with the output, change them if you know what you are doing.
+
+Note that the computing time will increase exponentially with `max_joinpoints` and will decrease with `n_cores`. 
+
+## Run
+
+To run the analysis, you then call `joinpoint()` with arguments: your dataset, the variables you want to consider, and the above-mentionned options.
+
+```{r}
+jp = joinpoint(sample_data, x=year, y=rate, by=sex, se=se,
+               run_opt_ini=run_opt, export_opt_ini=export_opt)
+names(jp)
+```
+
+Note that you can leave the options as default, and that the standard error can be left unfilled:
+
+```{r eval=FALSE}
+jp2 = joinpoint(sample_data, x=year, y=rate)
+```
+
+## Plotting
+
+You can use `jp_plot()` to plot the joinpoint lines along the scatter points:
+
+```{r, fig.height = 9, fig.width=7, message=FALSE}
+jp_plot(jp) + patchwork::plot_layout(ncol=1)
+```
+
+The result is a [patchwork](https://github.com/thomasp85/patchwork/) of ggplots, as the legend must be different for every level.
+
+## Logging
+
+You can look at the logs using `cat()`:
+
+```{r}
+cat(jp$run_summary)
+```
