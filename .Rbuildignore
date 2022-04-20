@@ -6,4 +6,7 @@
 TODO\.R
 DEV\.R
 
+LICENSE
+
+^cran-comments.md$
 ^README.Rmd$
