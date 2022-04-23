@@ -13,8 +13,8 @@
 #' @param by `<tidy-select>` one or several stratification variable (for instance sex)
 #' @param se `<tidy-select>` the standard error of the dependent variable. Can be left as `NULL` at the cost of a longer computation. See https://seer.cancer.gov/seerstat/WebHelp/Rate_Algorithms.htm for calculation formulas.
 #' @param y_type the type of dependent variable. Must be one of `c("Age-Adjusted Rate", "Crude rate", "Percent", "Proportion", "Count")`.
-#' @param export_opt_ini the result of [export_options()]
-#' @param run_opt_ini the result of [run_options()]
+#' @param export_opts the result of [export_options()]
+#' @param run_opts the result of [run_options()]
 #' @param cmd_path the path to the executable. Can usually be left default to `"C:/Program Files (x86)/Joinpoint Command/jpCommand.exe"`. Can also be set through `options(joinpoint_path="my/path/to/jp.exe")`.
 #' @param dir The temporary directory where all the temporary files will be written
 #' @param verbose Logical indicating whether or not to print out progress
@@ -30,7 +30,7 @@
 #' @return the list of the output tables
 joinpoint = function(data, x, y, by=NULL, se=NULL,
                      y_type=c("Age-Adjusted Rate", "Crude rate", "Percent", "Proportion", "Count"),
-                     export_opt_ini=export_options(), run_opt_ini=run_options(),
+                     export_opts=export_options(), run_opts=run_options(),
                      cmd_path=getOption("joinpoint_path", "C:/Program Files (x86)/Joinpoint Command/jpCommand.exe"),
                      dir=get_tempdir(), verbose=FALSE){
   wd_bak = getwd()
@@ -39,8 +39,8 @@ joinpoint = function(data, x, y, by=NULL, se=NULL,
     setwd(wd_bak)
   })
   dir.create("ini", showWarnings = FALSE)
-  cat(export_opt_ini, file="ini/export_opt_ini.ini")
-  cat(run_opt_ini, file="ini/run_opt_ini.ini")
+  cat(export_opts, file="ini/export_opt_ini.ini")
+  cat(run_opts, file="ini/run_opt_ini.ini")
   session = paste(sep="\n",
                   "[Joinpoint Input Files]",
                   "Session File=ini/session_ini.ini",
