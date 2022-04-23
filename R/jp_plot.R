@@ -1,9 +1,11 @@
 
-#' Title
+#' Plot the output of a joinpoint analysis.
 #'
 #' @param jp A list generated using [joinpoint()].
-#' @param legend_pattern [glue::glue()] pattern for the legend. Can use variables `slope`, `xmin`, and `xmax`. Can be set through options, e.g. `options(jp_plot_pattern="-{slope}-")`.
 #' @param by_level One or several stratification levels. Works only if `jp` was made using one single stratification variable.
+#' @param legend_pattern [glue::glue()] pattern for the legend. Can use variables `slope`, `xmin`, and `xmax`. Can be set through options, e.g. `options(jp_plot_legend_pattern="-{slope}-")`.
+#' @param title_pattern [glue::glue()] pattern for the title. Can use variables `key` (grouping variable) and `val` (current group). Can be set through options, e.g. `options(jp_plot_title_pattern="-{val}-")`.
+#' @param ... passed on to [patchwork::wrap_plots()]
 #'
 #' @return `patchwork` of `ggplot`s
 #' @export
@@ -17,8 +19,10 @@
 #' @importFrom tidyselect eval_select any_of
 #' @importFrom zoo na.locf
 jp_plot = function(jp,
-                   legend_pattern=getOption("jp_plot_pattern", "{xmin}-{xmax}: {slope}"),
-                   by_level=NULL){
+                   by_level=NULL,
+                   legend_pattern=getOption("jp_plot_legend_pattern", "{xmin}-{xmax}: {slope}"),
+                   title_pattern=getOption("jp_plot_title_pattern", "{key}={val}"),
+                   ...){
 
   variables = attr(jp$data_export, "variables")
   x = sym(variables$x)
@@ -27,6 +31,10 @@ jp_plot = function(jp,
 
   v = intersect(c("apc", "slope"), names(jp$data_export))
   if(length(v) !=1) stop("This should not happen, contact the developper of {joinpoint}.")
+  if(all(is.na(jp$data_export[[v]]))){
+    warning("Cannot plot the joinpoint model as all values of `", v, "` are NA. Please check the model source.")
+    return(NULL)
+  }
   if(v=="apc"){
     v_label = "Annual Percent Change"
   } else {
@@ -64,7 +72,7 @@ jp_plot = function(jp,
           geom_line(aes(y=.data$model, color=!!v, group=FALSE), size=1) +
           labs(color=v_label) +
           ylim(0, NA) +
-          ggtitle(glue('{byname}={.y}'))
+          ggtitle(glue(title_pattern, key=byname, val=.y))
       })
   } else {
     p = data %>%
@@ -74,5 +82,5 @@ jp_plot = function(jp,
       geom_line(aes(y=.data$model, color=!!v, group=.data$slope), size=1) +
       ylim(0, NA)
   }
-  patchwork::wrap_plots(p)
+  patchwork::wrap_plots(p, ...)
 }
