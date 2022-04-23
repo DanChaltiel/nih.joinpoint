@@ -2,24 +2,30 @@
 % Please edit documentation in R/jp_plot.R
 \name{jp_plot}
 \alias{jp_plot}
-\title{Title}
+\title{Plot the output of a joinpoint analysis.}
 \usage{
 jp_plot(
   jp,
-  legend_pattern = getOption("jp_plot_pattern", "{xmin}-{xmax}: {slope}"),
-  by_level = NULL
+  by_level = NULL,
+  legend_pattern = getOption("jp_plot_legend_pattern", "{xmin}-{xmax}: {slope}"),
+  title_pattern = getOption("jp_plot_title_pattern", "{key}={val}"),
+  ...
 )
 }
 \arguments{
 \item{jp}{A list generated using \code{\link[=joinpoint]{joinpoint()}}.}
 
-\item{legend_pattern}{\code{\link[glue:glue]{glue::glue()}} pattern for the legend. Can use variables \code{slope}, \code{xmin}, and \code{xmax}. Can be set through options, e.g. \code{options(jp_plot_pattern="-{slope}-")}.}
-
 \item{by_level}{One or several stratification levels. Works only if \code{jp} was made using one single stratification variable.}
+
+\item{legend_pattern}{\code{\link[glue:glue]{glue::glue()}} pattern for the legend. Can use variables \code{slope}, \code{xmin}, and \code{xmax}. Can be set through options, e.g. \code{options(jp_plot_legend_pattern="-{slope}-")}.}
+
+\item{title_pattern}{\code{\link[glue:glue]{glue::glue()}} pattern for the title. Can use variables \code{key} (grouping variable) and \code{val} (current group). Can be set through options, e.g. \code{options(jp_plot_title_pattern="-{val}-")}.}
+
+\item{...}{passed on to \code{\link[patchwork:wrap_plots]{patchwork::wrap_plots()}}}
 }
 \value{
 \code{patchwork} of \code{ggplot}s
 }
 \description{
-Title
+Plot the output of a joinpoint analysis.
 }

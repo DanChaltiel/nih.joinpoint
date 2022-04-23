@@ -10,3 +10,4 @@ LICENSE
 
 ^cran-comments.md$
 ^README.Rmd$
+^codemeta.json$

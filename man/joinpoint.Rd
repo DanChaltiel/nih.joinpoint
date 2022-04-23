@@ -11,8 +11,8 @@ joinpoint(
   by = NULL,
   se = NULL,
   y_type = c("Age-Adjusted Rate", "Crude rate", "Percent", "Proportion", "Count"),
-  export_opt_ini = export_options(),
-  run_opt_ini = run_options(),
+  export_opts = export_options(),
+  run_opts = run_options(),
   cmd_path = getOption("joinpoint_path",
     "C:/Program Files (x86)/Joinpoint Command/jpCommand.exe"),
   dir = get_tempdir(),
@@ -32,9 +32,9 @@ joinpoint(
 
 \item{y_type}{the type of dependent variable. Must be one of \code{c("Age-Adjusted Rate", "Crude rate", "Percent", "Proportion", "Count")}.}
 
-\item{export_opt_ini}{the result of \code{\link[=export_options]{export_options()}}}
+\item{export_opts}{the result of \code{\link[=export_options]{export_options()}}}
 
-\item{run_opt_ini}{the result of \code{\link[=run_options]{run_options()}}}
+\item{run_opts}{the result of \code{\link[=run_options]{run_options()}}}
 
 \item{cmd_path}{the path to the executable. Can usually be left default to \code{"C:/Program Files (x86)/Joinpoint Command/jpCommand.exe"}. Can also be set through \code{options(joinpoint_path="my/path/to/jp.exe")}.}
 

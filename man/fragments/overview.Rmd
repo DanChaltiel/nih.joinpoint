@@ -33,7 +33,7 @@ To run the analysis, you then call `joinpoint()` with arguments: your dataset, t
 
 ```{r}
 jp = joinpoint(sample_data, x=year, y=rate, by=sex, se=se,
-               run_opt_ini=run_opt, export_opt_ini=export_opt)
+               run_opts=run_opt, export_opts=export_opt)
 names(jp)
 ```
 
