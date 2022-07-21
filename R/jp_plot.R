@@ -21,6 +21,7 @@ jp_plot = function(jp,
                    by_level=NULL,
                    legend_pattern=getOption("jp_plot_legend_pattern", "{xmin}-{xmax}: {slope}"),
                    title_pattern=getOption("jp_plot_title_pattern", "{key}={val}"),
+                   ncol=1,
                    ...){
 
   variables = attr(jp$data_export, "variables")
@@ -81,5 +82,5 @@ jp_plot = function(jp,
       geom_line(aes(y=.data$model, color=!!v, group=.data$slope), size=1) +
       ylim(0, NA)
   }
-  patchwork::wrap_plots(p, ...)
+  patchwork::wrap_plots(p, ncol=ncol, ...)
 }
