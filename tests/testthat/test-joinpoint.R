@@ -7,7 +7,7 @@ test_that("joinpoint: default", {
     export_opt = export_options()
 
     #by, SE
-    jp = joinpoint(sample_data, x=year, y=rate, by=sex, se=se,
+    jp = joinpoint(nih_sample_data, x=year, y=rate, by=sex, se=se,
                    run_opts=run_opt, export_opts=export_opt)
     expect_type(jp, "list")
 
@@ -24,7 +24,7 @@ test_that("joinpoint: linear, no BY, no SE", {
     export_opt = export_options()
 
     #no by, no SE
-    jp = joinpoint(sample_data, x=year, y=rate,
+    jp = joinpoint(nih_sample_data, x=year, y=rate,
                    run_opts=run_opt, export_opts=export_opt)
     expect_type(jp, "list")
 
