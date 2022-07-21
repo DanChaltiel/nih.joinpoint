@@ -19,12 +19,13 @@
 #' @param dir The temporary directory where all the temporary files will be written
 #' @param verbose Logical indicating whether or not to print out progress
 #'
-#' @importFrom dplyr arrange %>%
+#' @import cli
+#' @import purrr
+#' @importFrom dplyr across arrange %>%
 #' @importFrom glue glue glue_collapse
-#' @importFrom tidyselect eval_select
-#' @importFrom purrr map imap_chr
 #' @importFrom readr write_delim read_file
 #' @importFrom rlang enquo sym
+#' @importFrom tidyselect eval_select
 #' @importFrom utils packageVersion
 #' @export
 #' @return the list of the output tables

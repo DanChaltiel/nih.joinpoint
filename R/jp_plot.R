@@ -11,10 +11,9 @@
 #' @export
 #' @importFrom dplyr select filter mutate group_by na_if %>%
 #' @importFrom forcats as_factor
-#' @importFrom purrr imap
 #' @importFrom ggplot2 ggplot aes geom_point geom_line ylim ggtitle labs
-#' @importFrom patchwork wrap_plots
 #' @importFrom glue glue
+#' @importFrom patchwork wrap_plots
 #' @importFrom rlang sym enquo :=
 #' @importFrom tidyselect eval_select any_of
 #' @importFrom zoo na.locf

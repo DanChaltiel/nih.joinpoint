@@ -42,7 +42,7 @@ r = function(x){
 #' @keywords internal
 #' @source rlang:::set_attrs_impl
 set_attrs = function(.x, ...){
-  attrs <- rlang::dots_list(...)
+  attrs <- dots_list(...)
   attributes(.x) <- c(attributes(.x), attrs)
   .x
 }
