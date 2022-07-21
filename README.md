@@ -106,7 +106,7 @@ options.
 
 ``` r
 jp = joinpoint(sample_data, x=year, y=rate, by=sex, se=se,
-               run_opt_ini=run_opt, export_opt_ini=export_opt)
+               run_opts=run_opt, export_opts=export_opt)
 names(jp)
 #> [1] "aapc"           "apc"            "data_export"    "selected_model"
 #> [5] "perm_test"      "report"         "run_summary"
@@ -118,6 +118,8 @@ error can be left unfilled:
 ``` r
 jp2 = joinpoint(sample_data, x=year, y=rate)
 ```
+
+Note though that by default this latter example used a single core to find a max of 4 joinpoints. It took 20 minutes to run on my computer, compared to 4 seconds for the first example.
 
 ## Plotting
 
