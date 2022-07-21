@@ -34,6 +34,7 @@ joinpoint = function(data, x, y, by=NULL, se=NULL,
                      export_opts=export_options(), run_opts=run_options(),
                      cmd_path=getOption("joinpoint_path", "C:/Program Files (x86)/Joinpoint Command/jpCommand.exe"),
                      dir=get_tempdir(), verbose=FALSE){
+  start_time = Sys.time()
   wd_bak = getwd()
   setwd(dir) #Necessary for `system()` to write to the temp directory.
   on.exit({
@@ -53,18 +54,22 @@ joinpoint = function(data, x, y, by=NULL, se=NULL,
   y_type = match.arg(y_type) %>% tolower()
   x=tidyselect::eval_select(enquo(x), data)
   y=tidyselect::eval_select(enquo(y), data)
-  se=tidyselect::eval_select(enquo(se), data, strict=FALSE)
   by=tidyselect::eval_select(enquo(by), data, strict=FALSE)
-  data = arrange(data, !!sym(names(x)))
+  se=tidyselect::eval_select(enquo(se), data, strict=FALSE)
+  stopifnot(length(x)==1)
+  stopifnot(length(y)==1)
+  stopifnot(length(by)>=0)
+  stopifnot(length(se)>=0)
+  data = arrange(data, across(any_of(names(x))))
+  # data = arrange(data, !!sym(names(x)))
+
 
   by_txt = NULL
   if(length(by)>0){
-    data = arrange(data, !!sym(names(by)))
-    i=1
-    by_txt = imap_chr(by, ~{
-      rtn = glue("by-var{i}={.y}", "by-var{i} location={.x}", .sep="\n")
-      i<<-i+1
-      rtn
+    data = arrange(data, across(any_of(names(by))))
+    by_txt = purrr::pmap_chr(list(by, names(by), seq(length(by))),
+                    function(.x, .n, .i){
+      glue("by-var{.i}={.n}", "by-var{.i} location={.x}", .sep="\n")
     }) %>% glue_collapse("\n")
   }
 
@@ -100,8 +105,8 @@ joinpoint = function(data, x, y, by=NULL, se=NULL,
     stop("The JoinPoint program could not be located at ", cmd_path, ". Note that you need to apply to NIH's form and download your own copy of this program for this package to work.")
   }
   suppressWarnings(file.remove("session_run.ErrorFile.txt"))
-  system(paste0('"', cmd_path, '" ', "session_run.ini"), intern=isFALSE(verbose))
-
+  output=system(paste0('"', cmd_path, '" ', "session_run.ini"), intern=isFALSE(verbose))
+  #TODO check that x is always 0?
   if(file.exists("session_run.ErrorFile.txt")){
     # readr::read_file("session_run.ErrorFile.txt") %>% suppressWarnings() %>% stringi::stri_flatten()
     # readLines("session_run.ErrorFile.txt") %>% suppressWarnings() %>% .[. != ""]
@@ -121,7 +126,7 @@ joinpoint = function(data, x, y, by=NULL, se=NULL,
   perm_test = r("session_run.permtestexport.txt")
   report = r("session_run.report.txt")
   run_summary = readr::read_file("session_run.RunSummary.txt")
-  variables = list(x=names(x), y=names(y), by=names(by), se=names(se))
+  parameters = list(x=names(x), y=names(y), by=names(by), se=names(se), y_type=y_type)
 
   if(isTRUE(verbose)){
     cat("\n",
@@ -138,13 +143,18 @@ joinpoint = function(data, x, y, by=NULL, se=NULL,
     data_export = data_export,
     selected_model = selected_model,
     perm_test = perm_test,
-    report = report,
-    run_summary = run_summary
+    report = report
   ) %>%
-    map(set_attrs, variables=variables)
+    map(set_attrs, variables=parameters)
 
+
+  attr(rtn, "execution_time") = Sys.time() - start_time
+  attr(rtn, "options") = list(run_opts=run_opts, export_opts=export_opts)
+  attr(rtn, "run_summary") = run_summary
+  attr(rtn, "parameters") = parameters
   attr(rtn, "directory") = dir
   attr(rtn, "version") = packageVersion("nih.joinpoint")
+  class(rtn) = "nih.joinpoint"
 
   setwd(wd_bak)
   rtn
