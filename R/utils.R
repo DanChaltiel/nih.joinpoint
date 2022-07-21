@@ -63,7 +63,22 @@ get_tempdir = function(){
   dirname
 }
 
-
+#' Browse the joinpoint files
+#'
+#' Open the directory in temporary files where joinpoint files are stored
+#'
+#' @param jp the joinpoint analysis to browse
+#'
+#' @export
+#' @examples
+#' jp = joinpoint_example()
+#' print(dir)
+#' #browseURL(dir)
+browse = function(jp){
+  path=attr(jp,"directory")
+  stopifnot(dir.exists(path))
+  browseURL(path)
+}
 
 
 
