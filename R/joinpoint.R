@@ -161,19 +161,28 @@ joinpoint = function(data, x, y, by=NULL, se=NULL,
 }
 
 
+#' @export
+print.nih.joinpoint = function(x, ...){
+  xx = keep(x, is_tibble) %>% imap_chr(~glue("{.y} ({ncol(.x)}x{nrow(.x)})"))
+  v = attr(x, "parameters") %>% paste(names(.), ., sep="=")
+  et = attr(x, "execution_time") %>% format(digits=3)
 
 
+  cli_inform(c(
+    "A {.pkg nih.joinpoint} model ({.pkg v{attr(x, 'version')}})",
+    "i"="Parameters: {.code {v}}",
+    "i"="Execution time: {et}",
+    "*"="Browse the object as a list of {length(xx)} table{?s}: {.code {xx}}",
+    "*"="Read the run summary using {.fn summary}",
+    "*"="Plot the result using {.fn jp_plot}"
+  ),
+  class="joinpoint_print")
+}
 
-#' Format helper
-#' @noRd
-#' @keywords internal
-generate_input_ini = function(session_ini, export_ini, run_ini,
-                              result="jp_result.txt"){
-  txt = glue(.sep="\n", .null=NULL,
-             "[Joinpoint Input Files]",
-             "Session File={session_ini}",
-             "Export Options File={export_ini}",
-             "Run Options File={run_ini}",
-             "Output File File={result}")
-  txt
+#' @export
+summary.nih.joinpoint = function(object, ...){
+  opts=attr(object, "options")
+  cat(opts$run_opts, "\n\n")
+  # cat(opts$export_opts, "\n\n")
+  cat(attr(object, "run_summary"))
 }
