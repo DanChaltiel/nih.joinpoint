@@ -10,7 +10,6 @@ joinpoint(
   y,
   by = NULL,
   se = NULL,
-  y_type = c("Age-Adjusted Rate", "Crude rate", "Percent", "Proportion", "Count"),
   export_opts = export_options(),
   run_opts = run_options(),
   cmd_path = getOption("joinpoint_path",
@@ -24,13 +23,11 @@ joinpoint(
 
 \item{x}{\verb{<tidy-select>} the independent variable (for instance the year)}
 
-\item{y}{\verb{<tidy-select>} the dependent variable of type \code{y_type}}
+\item{y}{\verb{<tidy-select>} the dependent variable}
 
 \item{by}{\verb{<tidy-select>} one or several stratification variable (for instance sex)}
 
 \item{se}{\verb{<tidy-select>} the standard error of the dependent variable. Can be left as \code{NULL} at the cost of a longer computation. See https://seer.cancer.gov/seerstat/WebHelp/Rate_Algorithms.htm for calculation formulas.}
-
-\item{y_type}{the type of dependent variable. Must be one of \code{c("Age-Adjusted Rate", "Crude rate", "Percent", "Proportion", "Count")}.}
 
 \item{export_opts}{the result of \code{\link[=export_options]{export_options()}}}
 

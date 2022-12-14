@@ -9,10 +9,9 @@
 #'
 #' @param data A data frame
 #' @param x `<tidy-select>` the independent variable (for instance the year)
-#' @param y `<tidy-select>` the dependent variable of type `y_type`
+#' @param y `<tidy-select>` the dependent variable
 #' @param by `<tidy-select>` one or several stratification variable (for instance sex)
 #' @param se `<tidy-select>` the standard error of the dependent variable. Can be left as `NULL` at the cost of a longer computation. See https://seer.cancer.gov/seerstat/WebHelp/Rate_Algorithms.htm for calculation formulas.
-#' @param y_type the type of dependent variable. Must be one of `c("Age-Adjusted Rate", "Crude rate", "Percent", "Proportion", "Count")`.
 #' @param export_opts the result of [export_options()]
 #' @param run_opts the result of [run_options()]
 #' @param cmd_path the path to the executable. Can usually be left default to `"C:/Program Files (x86)/Joinpoint Command/jpCommand.exe"`. Can also be set through `options(joinpoint_path="my/path/to/jp.exe")`.
@@ -30,7 +29,6 @@
 #' @export
 #' @return the list of the output tables
 joinpoint = function(data, x, y, by=NULL, se=NULL,
-                     y_type=c("Age-Adjusted Rate", "Crude rate", "Percent", "Proportion", "Count"),
                      export_opts=export_options(), run_opts=run_options(),
                      cmd_path=getOption("joinpoint_path", "C:/Program Files (x86)/Joinpoint Command/jpCommand.exe"),
                      dir=get_tempdir(), verbose=FALSE){
@@ -51,7 +49,6 @@ joinpoint = function(data, x, y, by=NULL, se=NULL,
                   "Output File File=jp_result.jpo")
   cat(session, file="session_run.ini")
 
-  y_type = match.arg(y_type) %>% tolower()
   x=tidyselect::eval_select(enquo(x), data)
   y=tidyselect::eval_select(enquo(y), data)
   by=tidyselect::eval_select(enquo(by), data, strict=FALSE)
@@ -87,10 +84,10 @@ joinpoint = function(data, x, y, by=NULL, se=NULL,
                      "Missing character=period",
                      "Fields with delimiter in quotes=false",
                      "Variable names include=false",
-
+                     "",
                      "[Joinpoint Session Parameters]",
-                     "{y_type}={names(y)}",
-                     "{y_type} location={y}",
+                     "Crude rate={names(y)}",
+                     "Crude rate location={y}",
                      "independent variable={names(x)}",
                      "independent variable location={x}",
                      by_txt,
@@ -120,7 +117,7 @@ joinpoint = function(data, x, y, by=NULL, se=NULL,
   perm_test = r("session_run.permtestexport.txt")
   report = r("session_run.report.txt")
   run_summary = readr::read_file("session_run.RunSummary.txt")
-  parameters = list(x=names(x), y=names(y), by=names(by), se=names(se), y_type=y_type)
+  parameters = list(x=names(x), y=names(y), by=names(by), se=names(se))
 
   if(isTRUE(verbose)){
     cat("\n",
