@@ -61,8 +61,6 @@ joinpoint = function(data, x, y, by=NULL, se=NULL,
   stopifnot(length(by)>=0)
   stopifnot(length(se)>=0)
   data = arrange(data, across(any_of(names(x))))
-  # data = arrange(data, !!sym(names(x)))
-
 
   by_txt = NULL
   if(length(by)>0){
@@ -108,15 +106,11 @@ joinpoint = function(data, x, y, by=NULL, se=NULL,
   output=system(paste0('"', cmd_path, '" ', "session_run.ini"), intern=isFALSE(verbose))
   #TODO check that x is always 0?
   if(file.exists("session_run.ErrorFile.txt")){
-    # readr::read_file("session_run.ErrorFile.txt") %>% suppressWarnings() %>% stringi::stri_flatten()
-    # readLines("session_run.ErrorFile.txt") %>% suppressWarnings() %>% .[. != ""]
-    # read.delim("session_run.ErrorFile.txt", sep="_____", encoding="UTF-16LE")
-    # readChar("session_run.ErrorFile.txt", file.info("session_run.ErrorFile.txt")$size)
-
     file.copy("session_run.ErrorFile.txt", glue("{wd_bak}/joinpoint_error.txt"))
-    setwd(wd_bak)
-    stop("Error when running the JoinPoint program. See `joinpoint_error.txt` for the details.")
-
+    error=read_bin("session_run.ErrorFile.txt") %>% str_split("\\n") %>% .[[1]]
+    cli_abort(c("Error when running the JoinPoint command-line program.
+                A `joinpoint_error.txt` file has been created.",
+                "", error))
   }
 
   aapc = r("session_run.aapcexport.txt")
@@ -155,8 +149,6 @@ joinpoint = function(data, x, y, by=NULL, se=NULL,
   attr(rtn, "directory") = dir
   attr(rtn, "version") = packageVersion("nih.joinpoint")
   class(rtn) = "nih.joinpoint"
-
-  setwd(wd_bak)
   rtn
 }
 
