@@ -35,6 +35,20 @@ r = function(x){
   }
 }
 
+#' Read text file that contains NUL characters
+#' @importFrom stringr str_remove_all
+#' @source https://stackoverflow.com/a/74795549/3888000
+#' @noRd
+#' @keywords internal
+read_bin = function(filename){
+  n = file.size(filename)
+  buffer = readBin(filename, 'raw', n=n)
+  # Unfortunately the above has a race condition, so check that the size hasn’t changed!
+  stopifnot(n == file.size(filename))
+  buffer = buffer[buffer != 0L]
+  rawToChar(buffer) %>% str_remove_all("\\r")
+}
+
 
 #' Pipeable attribute setter
 #' @importFrom rlang dots_list
