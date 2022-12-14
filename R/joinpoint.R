@@ -63,10 +63,12 @@ joinpoint = function(data, x, y, by=NULL, se=NULL,
   by_txt = NULL
   if(length(by)>0){
     data = arrange(data, across(any_of(names(by))))
-    by_txt = purrr::pmap_chr(list(by, names(by), seq(length(by))),
-                    function(.x, .n, .i){
-      glue("by-var{.i}={.n}", "by-var{.i} location={.x}", .sep="\n")
-    }) %>% glue_collapse("\n")
+    by_txt = purrr::pmap_chr(
+      list(by, names(by), seq(length(by))),
+      function(.x, .n, .i){
+        glue("by-var{.i}={.n}", "by-var{.i} location={.x}", .sep="\n")
+      }
+    ) %>% glue_collapse("\n")
   }
 
   se_txt = NULL
@@ -76,24 +78,7 @@ joinpoint = function(data, x, y, by=NULL, se=NULL,
                   .sep="\n")
   }
 
-  #TODO faire les formats avec les variables factor ?
-  session_ini = glue(.sep="\n", .null=NULL,
-                     "[Datafile options]",
-                     "Datafile name=dataset.txt",
-                     "File format=DOS/Windows",
-                     "Field delimiter=tab",
-                     "Missing character=period",
-                     "Fields with delimiter in quotes=false",
-                     "Variable names include=false",
-                     "",
-                     "[Joinpoint Session Parameters]",
-                     "Crude rate={names(y)}",
-                     "Crude rate location={y}",
-                     "independent variable={names(x)}",
-                     "independent variable location={x}",
-                     by_txt,
-                     se_txt
-                     )
+  session_ini = get_session_ini(x, y, by_txt, se_txt)
   cat(session_ini, file="ini/session_ini.ini")
   write_delim(data, "dataset.txt", delim="\t", na=".", col_names=FALSE)
 
@@ -148,6 +133,31 @@ joinpoint = function(data, x, y, by=NULL, se=NULL,
 }
 
 
+#' @noRd
+#' @keywords internal
+get_session_ini = function(x, y, by_txt, se_txt) {
+  session_ini = glue(
+    .sep="\n", .null=NULL,
+    "[Datafile options]",
+    "Datafile name=dataset.txt",
+    "File format=DOS/Windows",
+    "Field delimiter=tab",
+    "Missing character=period",
+    "Fields with delimiter in quotes=false",
+    "Variable names include=false",
+    "",
+    "[Joinpoint Session Parameters]",
+    "Crude rate={names(y)}",
+    "Crude rate location={y}",
+    "independent variable={names(x)}",
+    "independent variable location={x}",
+    by_txt,
+    se_txt
+  )
+}
+
+
+#' @importFrom tibble is_tibble
 #' @export
 print.nih.joinpoint = function(x, ...){
   xx = keep(x, is_tibble) %>% imap_chr(~glue("{.y} ({ncol(.x)}x{nrow(.x)})"))
