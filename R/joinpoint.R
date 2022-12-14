@@ -32,6 +32,7 @@ joinpoint = function(data, x, y, by=NULL, se=NULL,
                      export_opts=export_options(), run_opts=run_options(),
                      cmd_path=getOption("joinpoint_path", "C:/Program Files (x86)/Joinpoint Command/jpCommand.exe"),
                      dir=get_tempdir(), verbose=FALSE){
+  check_cmd_path(cmd_path)
   start_time = Sys.time()
   wd_bak = getwd()
   setwd(dir) #Necessary for `system()` to write to the temp directory.
@@ -96,9 +97,6 @@ joinpoint = function(data, x, y, by=NULL, se=NULL,
   cat(session_ini, file="ini/session_ini.ini")
   write_delim(data, "dataset.txt", delim="\t", na=".", col_names=FALSE)
 
-  if(!file.exists(cmd_path)){
-    stop("The JoinPoint program could not be located at ", cmd_path, ". Note that you need to apply to NIH's form and download your own copy of this program for this package to work.")
-  }
   suppressWarnings(file.remove("session_run.ErrorFile.txt"))
   output=system(paste0('"', cmd_path, '" ', "session_run.ini"), intern=isFALSE(verbose))
   #TODO check that x is always 0?

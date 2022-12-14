@@ -95,5 +95,13 @@ browse = function(jp){
 }
 
 
-
-
+#' @noRd
+#' @keywords internal
+check_cmd_path = function(cmd_path){
+  if(!file.exists(cmd_path)){
+    cli_abort(c("The JoinPoint software could not be located at {.path {cmd_path}}.",
+                i="Note that you need to apply to NIH's form and download your own
+                copy of this software for this package to work."))
+  }
+  #TODO run cmd -v & stop if not CLI & warn if old version.
+}
