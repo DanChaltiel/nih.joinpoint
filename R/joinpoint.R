@@ -159,25 +159,26 @@ get_session_ini = function(x, y, by_txt, se_txt) {
 
 #' @importFrom tibble is_tibble
 #' @export
-print.nih.joinpoint = function(x, ...){
+print.nih.joinpoint = function(x){
   xx = keep(x, is_tibble) %>% imap_chr(~glue("{.y} ({ncol(.x)}x{nrow(.x)})"))
-  v = attr(x, "parameters") %>% paste(names(.), ., sep="=")
+  v = attr(x, "parameters") %>% discard(~length(.x)==0) %>% paste(names(.), ., sep="=")
   et = attr(x, "execution_time") %>% format(digits=3)
-
 
   cli_inform(c(
     "A {.pkg nih.joinpoint} model ({.pkg v{attr(x, 'version')}})",
     "i"="Parameters: {.code {v}}",
     "i"="Execution time: {et}",
-    "*"="Browse the object as a list of {length(xx)} table{?s}: {.code {xx}}",
-    "*"="Read the run summary using {.fn summary}",
-    "*"="Plot the result using {.fn jp_plot}"
+    "*"="Use the object as a list of {length(xx)} table{?s}: {.val {xx}}.",
+    "*"="Read the run summary using {.run summary()}.",
+    "*"="Plot the result using {.run jp_plot()}."
   ),
   class="joinpoint_print")
 }
 
 #' @export
 summary.nih.joinpoint = function(object, ...){
+  cli_inform(c(i="You can read the CLI files using {.run browse(jp_object)}"))
+
   opts=attr(object, "options")
   cat(opts$run_opts, "\n\n")
   # cat(opts$export_opts, "\n\n")
