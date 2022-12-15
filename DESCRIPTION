@@ -1,5 +1,5 @@
 Package: nih.joinpoint
-Version: 0.1.0.9000
+Version: 0.1.0.9001
 Title: R Interface for NIH's Joinpoint Regression Software
 Authors@R: 
   c(person(given = "Dan",
