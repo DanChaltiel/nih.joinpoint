@@ -27,9 +27,9 @@ tf = function(x) tolower(as.character(x))
 r = function(x){
   #TODO read, detect rows that are exactly colnames, type.convert(as.is=TRUE)
   if(file.exists(x)){
-    readr::read_delim(x, delim="\t", na=".",
-                      show_col_types=FALSE, progress=FALSE) %>%
-      as_tibble() %>% janitor::clean_names()
+    read.csv(x) %>%
+      as_tibble() %>%
+      clean_names()
   } else{
     NULL
   }
@@ -104,4 +104,12 @@ check_cmd_path = function(cmd_path){
                 copy of this software for this package to work."))
   }
   #TODO run cmd -v & stop if not CLI & warn if old version.
+}
+
+#' @noRd
+#' @keywords internal
+#' @source checkmate::vname
+vname = function(x){
+  paste0(deparse(eval.parent(substitute(substitute(x))), width.cutoff=500L),
+         collapse = "\n")
 }
