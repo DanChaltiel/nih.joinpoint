@@ -29,6 +29,12 @@ jp_plot = function(jp,
   y = sym(variables$y)
   by = variables$by
 
+  if(length(by)>1){
+    cli::cli_abort(c("{.fn jp_plot} cannot be used when more than 1 stratification variable is set.",
+                     x="The current joinpoint object has {length(by)} stratification variable{?s}: {by}."),
+                   class="jp_plot_many_stratif_error")
+  }
+
   v = intersect(c("apc", "slope"), names(jp$data_export))
   if(length(v) !=1) stop("This should not happen, contact the developper of {joinpoint}.")
   if(all(is.na(jp$data_export[[v]]))){
@@ -43,7 +49,6 @@ jp_plot = function(jp,
   v=sym(v)
 
   byname = names(select(jp$data_export, {{by}}))
-
   data = jp$data_export %>%
     mutate(slope0 = na_if(!!v, ".") %>% zoo::na.locf(fromLast=TRUE) %>% as_factor()) %>%
     group_by(.data$slope0) %>%
@@ -69,7 +74,7 @@ jp_plot = function(jp,
       imap(~{
         ggplot(.x, aes(x={{x}}, y={{y}})) +
           geom_point() +
-          geom_line(aes(y=.data$model, color=!!v, group=FALSE), size=1) +
+          geom_line(aes(y=.data$model, color=!!v, group=FALSE), linewidth=1) +
           labs(color=v_label) +
           ylim(0, NA) +
           ggtitle(glue(title_pattern, key=byname, val=.y))
@@ -79,7 +84,7 @@ jp_plot = function(jp,
       ggplot(aes(x={{x}}, y={{y}})) +
       geom_point() +
       labs(color=v_label) +
-      geom_line(aes(y=.data$model, color=!!v, group=.data$slope), size=1) +
+      geom_line(aes(y=.data$model, color=!!v, group=.data$slope), linewidth=1) +
       ylim(0, NA)
   }
   patchwork::wrap_plots(p, ncol=ncol, ...)

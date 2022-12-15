@@ -9,6 +9,7 @@ jp_plot(
   by_level = NULL,
   legend_pattern = getOption("jp_plot_legend_pattern", "{xmin}-{xmax}: {slope}"),
   title_pattern = getOption("jp_plot_title_pattern", "{key}={val}"),
+  ncol = 1,
   ...
 )
 }
