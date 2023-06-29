@@ -60,7 +60,7 @@ jp_plot = function(jp,
   if(!is.null(by_level)){
     if(length(byname)!=1){
       warning("`by_level` can only be used when a single stratification variable is set.")
-    } else if(!all(by_level %in% .data[[byname]])){
+    } else if(!all(by_level %in% data[[byname]])){
       warning("`by_level` (=[", paste(by_level, collapse=","), "]) is not a value contained in column ", byname)
     } else {
       data = filter(data, !!sym(by) %in% by_level)
