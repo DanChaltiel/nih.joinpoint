@@ -29,7 +29,13 @@ As for now, you can only install the development version of this package from Gi
 devtools::install_github("DanChaltiel/nih.joinpoint")
 ```
 
-I plan to release it on CRAN someday.
+## Lifecycle: experimental
+
+This package is still in its experimental phase, so breaking changes might happen in the future.
+
+Therefore, you should probably use [`renv`](https://rstudio.github.io/renv/articles/renv.html) in your project so that your old code will run even if you update this package.
+
+When the interface is mature enough, this package will be released on CRAN.
 
 ## Dataset
 
@@ -91,7 +97,8 @@ names(jp)
 Note that you can leave the options as default, and that the standard error can be left unfilled:
 
 ``` r
-jp2 = joinpoint(nih_sample_data, x=year, y=rate)
+jp2 = joinpoint(nih_sample_data, x=year, y=rate, 
+                run_opts=run_opt)
 ```
 
 Note though that by default this latter example used a single core to find a max of 4 joinpoints. It took 20 minutes to run on my computer, compared to 4 seconds for the first example.
@@ -101,12 +108,18 @@ Note though that by default this latter example used a single core to find a max
 You can use `jp_plot()` to plot the joinpoint lines along the scatter points:
 
 ``` r
-jp_plot(jp) + patchwork::plot_layout(ncol=1)
+jp_plot(jp)
 ```
 
 <img src="man/figures/README-unnamed-chunk-6-1.png" width="100%"/>
 
 The result is a [patchwork](https://github.com/thomasp85/patchwork/) of ggplots, as the legend must be different for every level.
+
+Note that you can use `by_level` to filter specific groups:
+
+``` r
+jp_plot(jp, by_level=c("Male", "Female"))
+```
 
 ## Logging
 
