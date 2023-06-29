@@ -63,7 +63,9 @@ jp_plot = function(jp,
     } else if(!all(by_level %in% data[[byname]])){
       warning("`by_level` (=[", paste(by_level, collapse=","), "]) is not a value contained in column ", byname)
     } else {
-      data = filter(data, !!sym(by) %in% by_level)
+      data = data %>%
+        filter(!!sym(by) %in% by_level) %>%
+        mutate(across(!!sym(by), ~factor(.x, levels=by_level)))
     }
   }
 
