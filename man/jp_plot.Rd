@@ -10,6 +10,7 @@ jp_plot(
   legend_pattern = getOption("jp_plot_legend_pattern", "{xmin}-{xmax}: {slope}"),
   title_pattern = getOption("jp_plot_title_pattern", "{key}={val}"),
   ncol = 1,
+  return_patchwork = TRUE,
   ...
 )
 }
@@ -25,7 +26,7 @@ jp_plot(
 \item{...}{passed on to \code{\link[patchwork:wrap_plots]{patchwork::wrap_plots()}}}
 }
 \value{
-\code{patchwork} of \code{ggplot}s
+a \code{patchwork} if \code{return_patchwork==TRUE}, a list of \code{ggplots} otherwise
 }
 \description{
 Plot the output of a joinpoint analysis.

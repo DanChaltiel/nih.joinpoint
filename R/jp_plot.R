@@ -7,7 +7,7 @@
 #' @param title_pattern [glue::glue()] pattern for the title. Can use variables `key` (grouping variable) and `val` (current group). Can be set through options, e.g. `options(jp_plot_title_pattern="-{val}-")`.
 #' @param ... passed on to [patchwork::wrap_plots()]
 #'
-#' @return `patchwork` of `ggplot`s
+#' @return a `patchwork` if `return_patchwork==TRUE`, a list of `ggplots` otherwise
 #' @export
 #' @importFrom dplyr select filter mutate group_by na_if %>%
 #' @importFrom forcats as_factor
@@ -22,6 +22,7 @@ jp_plot = function(jp,
                    legend_pattern=getOption("jp_plot_legend_pattern", "{xmin}-{xmax}: {slope}"),
                    title_pattern=getOption("jp_plot_title_pattern", "{key}={val}"),
                    ncol=1,
+                   return_patchwork=TRUE,
                    ...){
 
   variables = attr(jp$data_export, "variables")
@@ -56,7 +57,6 @@ jp_plot = function(jp,
            xmin = min({{x}}), xmax=max({{x}}),
            !!v := glue(legend_pattern))
 
-
   if(!is.null(by_level)){
     if(length(byname)!=1){
       warning("`by_level` can only be used when a single stratification variable is set.")
@@ -86,6 +86,8 @@ jp_plot = function(jp,
       labs(color=v_label) +
       geom_line(aes(y=.data$model, color=!!v, group=.data$slope), linewidth=1) +
       ylim(0, NA)
+    p = list(p)
   }
+  if(isFALSE(return_patchwork)) return(p)
   patchwork::wrap_plots(p, ncol=ncol, ...)
 }
