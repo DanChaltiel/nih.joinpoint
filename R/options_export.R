@@ -111,7 +111,7 @@ export_options = function(models=c("best fit", "all"),
              f("Export aapc", export_aapc, missing(export_aapc)),
              f("Export ftest", export_ftest, missing(export_ftest)),
              f("Export pairwise", export_pairwise, missing(export_pairwise)),
-             f("Export jump_cr", export_jump_cr, missing(export_jump_cr)),
+             f("Export jump_cr", export_jump_cr, missing(export_jump_cr))
   )
   txt
 }
