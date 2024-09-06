@@ -91,8 +91,10 @@ jp = joinpoint(nih_sample_data, x=year, y=rate, by=sex, se=se,
                run_opts=run_opt, export_opts=export_opt)
 names(jp)
 #> [1] "aapc"           "apc"            "data_export"    "selected_model"
-#> [5] "perm_test"      "report"         "run_summary"
+#> [5] "perm_test"      "report"         
 ```
+
+If you'd like to have more information about your joinpoint run, you can use `summary(jp)`.
 
 Note that you can leave the options as default, and that the standard error can be left unfilled:
 
