@@ -4,7 +4,11 @@
 
 <!-- badges: start -->
 
-[![Package-License](http://img.shields.io/badge/license-GPL--3-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-3.0.html) [![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html) [![Last Commit](https://img.shields.io/github/last-commit/DanChaltiel/nih.joinpoint)](https://github.com/DanChaltiel/nih.joinpoint/) [![CRAN status](https://www.r-pkg.org/badges/version/nih.joinpoint)](https://CRAN.R-project.org/package=nih.joinpoint)
+[![Package-License](http://img.shields.io/badge/license-GPL--3-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-3.0.html) [![Lifecycle: abandoned](https://img.shields.io/badge/lifecycle-abandoned-red.svg)](https://lifecycle.r-lib.org/articles/stages.html) [![Last Commit](https://img.shields.io/github/last-commit/DanChaltiel/nih.joinpoint)](https://github.com/DanChaltiel/nih.joinpoint/) [![CRAN status](https://www.r-pkg.org/badges/version/nih.joinpoint)](https://CRAN.R-project.org/package=nih.joinpoint)
+
+⚠️ This repository is no longer maintained.  ⚠️   
+You may consider using the [`segmented`](https://cran.r-project.org/web/packages/segmented/index.html) R package instead.
+Alternatively, you are more than welcome to fork it.
 
 ## Joinpoint Regression Software
 
